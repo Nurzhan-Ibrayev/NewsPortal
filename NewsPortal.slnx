@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="NewsPortal.Tests/NewsPortal.Tests.csproj" />
+  <Project Path="NewsPortal/NewsPortal.csproj" />
+</Solution>

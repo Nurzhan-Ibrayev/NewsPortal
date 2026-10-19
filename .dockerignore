@@ -1,0 +1,25 @@
+# Результаты сборки — образ собирает всё заново
+**/bin/
+**/obj/
+
+# Git, IDE, локальные файлы
+.git/
+.gitignore
+.vs/
+.vscode/
+.idea/
+**/*.user
+**/*.suo
+
+# Секреты и локальная конфигурация — в образ не попадают
+.env
+.env.*
+**/secrets.json
+**/appsettings.*.local.json
+
+# Не нужно для запуска приложения
+NewsPortal.Tests/
+**/Dockerfile*
+docker-compose*.yml
+.dockerignore
+*.md

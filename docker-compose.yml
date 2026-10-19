@@ -1,0 +1,15 @@
+# Локальный запуск приложения в контейнере. Базы данных здесь нет:
+# используется PostgreSQL в Neon, строка подключения берётся из файла .env.
+#
+#   1. Скопируйте .env.example в .env и впишите строку подключения Neon.
+#   2. docker compose up --build
+#   3. Откройте http://localhost:8080
+services:
+  web:
+    build: .
+    image: newsportal
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    restart: unless-stopped
