@@ -1,0 +1,25 @@
+@model EditArticleViewModel
+@{
+    ViewData["Title"] = "Исправление статьи";
+}
+
+<h1 class="h3 mb-3">Исправление статьи</h1>
+
+@if (!string.IsNullOrEmpty(Model.RejectionReason))
+{
+    <div class="alert alert-danger">
+        <h2 class="h6">Причина отклонения</h2>
+        <p class="mb-0 article-content">@Model.RejectionReason</p>
+    </div>
+}
+
+<form asp-action="Edit" asp-route-id="@Model.Id" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+    <partial name="_ArticleFields" model="Model" />
+    <button type="submit" class="btn btn-primary">Сохранить и отправить повторно</button>
+    <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-outline-secondary">Отмена</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

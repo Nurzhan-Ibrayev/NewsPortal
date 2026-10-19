@@ -1,0 +1,15 @@
+@model Article
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<article>
+    <h1 class="h2">@Model.Title</h1>
+    <p class="text-muted">
+        @Model.Author?.DisplayName · <partial name="_DateTime" model="Model.PublishedAt" />
+    </p>
+    @* Обычный вывод @ экранирует HTML: теги из текста статьи показываются как текст. *@
+    <div class="article-content">@Model.Content</div>
+</article>
+
+<a asp-action="Index" class="btn btn-outline-secondary mt-4">← Все новости</a>

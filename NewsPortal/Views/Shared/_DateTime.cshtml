@@ -1,0 +1,11 @@
+@model DateTime?
+@* Дата хранится в UTC. site.js переводит её в часовой пояс браузера. *@
+@if (Model is DateTime value)
+{
+    var utc = DateTime.SpecifyKind(value, DateTimeKind.Utc);
+    <time datetime="@utc.ToString("o")" data-local-time>@utc.ToString("dd.MM.yyyy HH:mm") UTC</time>
+}
+else
+{
+    <span class="text-muted">—</span>
+}

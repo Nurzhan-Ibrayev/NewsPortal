@@ -1,0 +1,9 @@
+@model string
+@* Выпадающий список ролей. Сервер всё равно проверяет, что роль из списка Roles.All. *@
+<label for="Role" class="form-label">Роль</label>
+<select id="Role" name="Role" class="form-select">
+    @foreach (var role in Roles.All)
+    {
+        <option value="@role" selected="@(role == Model)">@Roles.GetDisplayName(role)</option>
+    }
+</select>

@@ -1,0 +1,45 @@
+@model List<Article>
+@{
+    ViewData["Title"] = "Мои статьи";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="h3 mb-0">Мои статьи</h1>
+    <a asp-action="Create" class="btn btn-primary">Новая статья</a>
+</div>
+
+@if (Model.Count == 0)
+{
+    <p class="text-muted">У вас пока нет статей.</p>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead>
+                <tr>
+                    <th>Заголовок</th>
+                    <th>Статус</th>
+                    <th>Изменена</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var article in Model)
+                {
+                    <tr>
+                        <td><a asp-action="Details" asp-route-id="@article.Id">@article.Title</a></td>
+                        <td><partial name="_StatusBadge" model="article.Status" /></td>
+                        <td><partial name="_DateTime" model="(DateTime?)article.UpdatedAt" /></td>
+                        <td class="text-end">
+                            @if (article.Status == ArticleStatus.Rejected)
+                            {
+                                <a asp-action="Edit" asp-route-id="@article.Id" class="btn btn-sm btn-outline-primary">Исправить</a>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

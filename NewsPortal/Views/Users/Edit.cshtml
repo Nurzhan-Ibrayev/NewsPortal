@@ -1,0 +1,57 @@
+@model EditUserViewModel
+@{
+    ViewData["Title"] = "Редактирование пользователя";
+}
+
+<h1 class="h3 mb-3">Редактирование пользователя</h1>
+
+@if (Model.IsBlocked)
+{
+    <div class="alert alert-danger">Пользователь заблокирован. Разблокировать его можно в списке пользователей.</div>
+}
+
+<div class="row">
+    <div class="col-md-8 col-lg-6">
+        <form asp-action="Edit" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+            <input type="hidden" asp-for="Id" />
+
+            <div class="mb-3">
+                <label asp-for="DisplayName" class="form-label"></label>
+                <input asp-for="DisplayName" class="form-control" />
+                <span asp-validation-for="DisplayName" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Email" class="form-label"></label>
+                <input asp-for="Email" class="form-control" autocomplete="off" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <partial name="_RoleSelect" model="Model.Role" />
+                <span asp-validation-for="Role" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="NewPassword" class="form-label"></label>
+                <input asp-for="NewPassword" class="form-control" autocomplete="new-password" />
+                <div class="form-text">Оставьте пустым, чтобы не менять пароль.</div>
+                <span asp-validation-for="NewPassword" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="ConfirmNewPassword" class="form-label"></label>
+                <input asp-for="ConfirmNewPassword" class="form-control" autocomplete="new-password" />
+                <span asp-validation-for="ConfirmNewPassword" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Сохранить</button>
+            <a asp-action="Index" class="btn btn-outline-secondary">Отмена</a>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

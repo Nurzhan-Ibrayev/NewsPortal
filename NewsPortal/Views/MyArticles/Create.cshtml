@@ -1,0 +1,18 @@
+@model ArticleFormViewModel
+@{
+    ViewData["Title"] = "Новая статья";
+}
+
+<h1 class="h3 mb-3">Новая статья</h1>
+
+<form asp-action="Create" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+    <partial name="_ArticleFields" model="Model" />
+    <p class="text-muted small">После сохранения статья будет отправлена модератору. Опубликует её модератор.</p>
+    <button type="submit" class="btn btn-primary">Сохранить и отправить на модерацию</button>
+    <a asp-action="Index" class="btn btn-outline-secondary">Отмена</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

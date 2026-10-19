@@ -1,0 +1,53 @@
+@model ModerationListViewModel
+@{
+    ViewData["Title"] = "Модерация";
+    var tabs = new[] { ArticleStatus.Pending, ArticleStatus.Rejected, ArticleStatus.Published };
+}
+
+<h1 class="h3 mb-3">Модерация</h1>
+
+<ul class="nav nav-tabs mb-3">
+    @foreach (var tab in tabs)
+    {
+        <li class="nav-item">
+            <a class="nav-link @(tab == Model.Status ? "active" : "")" asp-action="Index" asp-route-status="@tab">@tab.GetDisplayName()</a>
+        </li>
+    }
+</ul>
+
+@if (Model.Articles.Count == 0)
+{
+    <p class="text-muted">Статей с этим статусом нет.</p>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead>
+                <tr>
+                    <th>Заголовок</th>
+                    <th>Автор</th>
+                    <th>@(Model.Status == ArticleStatus.Pending ? "Отправлена" : "Решение принято")</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var article in Model.Articles)
+                {
+                    <tr>
+                        <td>@article.Title</td>
+                        <td>@article.Author?.DisplayName</td>
+                        <td>
+                            <partial name="_DateTime" model="Model.Status == ArticleStatus.Pending ? article.UpdatedAt : article.ReviewedAt" />
+                        </td>
+                        <td class="text-end">
+                            <a asp-action="Review" asp-route-id="@article.Id" class="btn btn-sm btn-outline-primary">
+                                @(Model.Status == ArticleStatus.Pending ? "Проверить" : "Открыть")
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

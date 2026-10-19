@@ -1,0 +1,70 @@
+@model ArticleReviewViewModel
+@{
+    var article = Model.Article;
+    ViewData["Title"] = "Проверка: " + article.Title;
+}
+
+<div class="mb-3">
+    <a asp-action="Index" asp-route-status="@article.Status">← К списку</a>
+</div>
+
+<div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+    <h1 class="h3 mb-0">@article.Title</h1>
+    <partial name="_StatusBadge" model="article.Status" />
+</div>
+
+<dl class="row small text-muted mb-3">
+    <dt class="col-sm-3">Автор</dt>
+    <dd class="col-sm-9">@article.Author?.DisplayName</dd>
+    <dt class="col-sm-3">Изменена</dt>
+    <dd class="col-sm-9"><partial name="_DateTime" model="(DateTime?)article.UpdatedAt" /></dd>
+    @if (article.ReviewedAt is not null)
+    {
+        <dt class="col-sm-3">Последнее решение</dt>
+        <dd class="col-sm-9">
+            <partial name="_DateTime" model="article.ReviewedAt" />, @article.ReviewedBy?.DisplayName
+        </dd>
+    }
+</dl>
+
+@if (!string.IsNullOrEmpty(article.RejectionReason))
+{
+    <div class="alert @(article.Status == ArticleStatus.Rejected ? "alert-danger" : "alert-secondary")">
+        <h2 class="h6">
+            @(article.Status == ArticleStatus.Rejected ? "Причина отклонения" : "Причина предыдущего отклонения")
+        </h2>
+        <p class="mb-0 article-content">@article.RejectionReason</p>
+    </div>
+}
+
+<div class="card mb-4">
+    <div class="card-body article-content">@article.Content</div>
+</div>
+
+@if (article.Status == ArticleStatus.Pending)
+{
+    <div class="row g-4">
+        <div class="col-md-4">
+            <h2 class="h5">Опубликовать</h2>
+            <form asp-action="Publish" asp-route-id="@article.Id" method="post">
+                <button type="submit" class="btn btn-success">Опубликовать</button>
+            </form>
+        </div>
+        <div class="col-md-8">
+            <h2 class="h5">Отклонить</h2>
+            <form asp-action="Reject" asp-route-id="@article.Id" method="post">
+                <div class="mb-2">
+                    <label asp-for="Reject.RejectionReason" class="form-label"></label>
+                    <textarea asp-for="Reject.RejectionReason" class="form-control" rows="4"
+                              placeholder="Что нужно исправить автору"></textarea>
+                    <span asp-validation-for="Reject.RejectionReason" class="text-danger"></span>
+                </div>
+                <button type="submit" class="btn btn-danger">Отклонить</button>
+            </form>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

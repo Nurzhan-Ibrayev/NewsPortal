@@ -1,0 +1,49 @@
+@model Article
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<div class="mb-3">
+    <a asp-action="Index">← Мои статьи</a>
+</div>
+
+<div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+    <h1 class="h3 mb-0">@Model.Title</h1>
+    <partial name="_StatusBadge" model="Model.Status" />
+</div>
+
+<dl class="row small text-muted mb-3">
+    <dt class="col-sm-3">Создана</dt>
+    <dd class="col-sm-9"><partial name="_DateTime" model="(DateTime?)Model.CreatedAt" /></dd>
+    <dt class="col-sm-3">Изменена</dt>
+    <dd class="col-sm-9"><partial name="_DateTime" model="(DateTime?)Model.UpdatedAt" /></dd>
+    @if (Model.Status == ArticleStatus.Published)
+    {
+        <dt class="col-sm-3">Опубликована</dt>
+        <dd class="col-sm-9"><partial name="_DateTime" model="Model.PublishedAt" /></dd>
+    }
+</dl>
+
+@if (Model.Status == ArticleStatus.Rejected)
+{
+    <div class="alert alert-danger">
+        <h2 class="h6">Причина отклонения</h2>
+        <p class="mb-2 article-content">@Model.RejectionReason</p>
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-sm btn-primary">Исправить и отправить повторно</a>
+    </div>
+}
+else if (Model.Status == ArticleStatus.Pending)
+{
+    <div class="alert alert-warning">Статья ожидает проверки модератором.</div>
+}
+else
+{
+    <div class="alert alert-success">
+        Статья опубликована.
+        <a asp-controller="Home" asp-action="Article" asp-route-id="@Model.Id" class="alert-link">Открыть на сайте</a>
+    </div>
+}
+
+<div class="card">
+    <div class="card-body article-content">@Model.Content</div>
+</div>

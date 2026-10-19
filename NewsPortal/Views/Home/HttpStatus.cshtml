@@ -1,0 +1,18 @@
+@model int
+@{
+    var (title, text) = Model switch
+    {
+        400 => ("Некорректный запрос", "Возможно, форма устарела. Обновите страницу и попробуйте ещё раз."),
+        403 => ("Недостаточно прав", "У вас нет доступа к этой странице."),
+        404 => ("Страница не найдена", "Страница не существует или у вас нет к ней доступа."),
+        _ => ("Ошибка", "Не удалось выполнить запрос.")
+    };
+    ViewData["Title"] = title;
+}
+
+<div class="alert alert-warning">
+    <h1 class="h4">@title</h1>
+    <p class="mb-0">@text</p>
+</div>
+
+<a asp-controller="Home" asp-action="Index" class="btn btn-outline-primary">На главную</a>

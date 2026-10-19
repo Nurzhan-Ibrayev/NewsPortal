@@ -1,0 +1,17 @@
+﻿@model ErrorViewModel
+@{
+    ViewData["Title"] = "Ошибка";
+}
+
+@* Подробности исключения пользователю не показываем — они только в логах сервера. *@
+<div class="alert alert-danger">
+    <h1 class="h4">Что-то пошло не так</h1>
+    <p class="mb-0">При обработке запроса произошла ошибка. Попробуйте повторить позже.</p>
+</div>
+
+@if (Model.ShowRequestId)
+{
+    <p class="text-muted small">Код запроса для администратора: <code>@Model.RequestId</code></p>
+}
+
+<a asp-controller="Home" asp-action="Index" class="btn btn-outline-primary">На главную</a>

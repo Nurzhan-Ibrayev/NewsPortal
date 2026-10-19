@@ -1,0 +1,70 @@
+@model List<UserListItemViewModel>
+@{
+    ViewData["Title"] = "Пользователи";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="h3 mb-0">Пользователи</h1>
+    <a asp-action="Create" class="btn btn-primary">Создать пользователя</a>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-hover align-middle">
+        <thead>
+            <tr>
+                <th>Имя</th>
+                <th>Email</th>
+                <th>Роль</th>
+                <th>Статус</th>
+                <th>Создан</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td>
+                        @user.DisplayName
+                        @if (user.IsCurrentUser)
+                        {
+                            <span class="badge bg-secondary">это вы</span>
+                        }
+                    </td>
+                    <td>@user.Email</td>
+                    <td>@Roles.GetDisplayName(user.Role)</td>
+                    <td>
+                        @if (user.IsBlocked)
+                        {
+                            <span class="badge bg-danger">Заблокирован</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-success">Активен</span>
+                        }
+                    </td>
+                    <td><partial name="_DateTime" model="(DateTime?)user.CreatedAt" /></td>
+                    <td class="text-end text-nowrap">
+                        <a asp-action="Edit" asp-route-id="@user.Id" class="btn btn-sm btn-outline-primary">Изменить</a>
+                        @if (!user.IsCurrentUser)
+                        {
+                            if (user.IsBlocked)
+                            {
+                                <form asp-action="Unblock" asp-route-id="@user.Id" method="post" class="d-inline">
+                                    <button type="submit" class="btn btn-sm btn-outline-success">Разблокировать</button>
+                                </form>
+                            }
+                            else
+                            {
+                                <form asp-action="Block" asp-route-id="@user.Id" method="post" class="d-inline"
+                                      data-confirm="Заблокировать пользователя @user.Email?">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">Заблокировать</button>
+                                </form>
+                            }
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
